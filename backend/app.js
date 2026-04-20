@@ -20,6 +20,7 @@ const complaintRoutes = require('./routes/complaintRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const parkingRoutes = require('./routes/parkingRoutes');
 const maintenanceRoutes = require('./routes/maintenanceRoutes');
+const noticeRoutes = require('./routes/noticeRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/flats', flatRoutes);
@@ -27,6 +28,7 @@ app.use('/api/complaints', complaintRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/parking', parkingRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
+app.use('/api/notices', noticeRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {

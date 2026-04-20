@@ -12,6 +12,12 @@ import {
   LogOut,
   Bell
 } from 'lucide-react';
+
+import DashboardHome from '../pages/DashboardHome';
+import Complaints from '../pages/Complaints';
+import Flats from '../pages/Flats';
+import Maintenance from '../pages/Maintenance';
+
 import './DashboardLayout.css';
 
 const DashboardLayout = () => {
@@ -23,32 +29,15 @@ const DashboardLayout = () => {
     navigate('/login');
   };
 
-  const getMenuItems = () => {
-    const common = [
-      { path: '/', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
-      { path: '/notices', icon: <Bell size={20} />, label: 'Notices' },
-    ];
+  const menuItems = [
+    { path: '/', icon: <LayoutDashboard size={20} />, label: 'Dashboard', roles: ['Admin', 'Owner', 'Tenant'] },
+    { path: '/flats', icon: <Building2 size={20} />, label: 'Flats', roles: ['Admin'] },
+    { path: '/complaints', icon: <MessageSquare size={20} />, label: 'Complaints', roles: ['Admin', 'Owner', 'Tenant'] },
+    { path: '/maintenance', icon: <CreditCard size={20} />, label: 'Maintenance', roles: ['Admin', 'Owner', 'Tenant'] },
+    { path: '/bookings', icon: <Calendar size={20} />, label: 'Bookings', roles: ['Owner', 'Tenant'] },
+  ];
 
-    if (user?.resident_type === 'Admin') {
-      return [
-        ...common,
-        { path: '/flats', icon: <Building2 size={20} />, label: 'Flats' },
-        { path: '/residents', icon: <Users size={20} />, label: 'Residents' },
-        { path: '/maintenance', icon: <CreditCard size={20} />, label: 'Billing' },
-      ];
-    }
-
-    if (user?.resident_type === 'Owner' || user?.resident_type === 'Tenant') {
-      return [
-        ...common,
-        { path: '/bookings', icon: <Calendar size={20} />, label: 'My Bookings' },
-        { path: '/complaints', icon: <MessageSquare size={20} />, label: 'My Complaints' },
-        { path: '/vehicles', icon: <Car size={20} />, label: 'My Vehicles' },
-      ];
-    }
-
-    return common;
-  };
+  const filteredMenu = menuItems.filter(item => item.roles.includes(user?.resident_type));
 
   return (
     <div className="layout-container">
@@ -58,7 +47,7 @@ const DashboardLayout = () => {
         </div>
         
         <nav className="sidebar-nav">
-          {getMenuItems().map((item) => (
+          {filteredMenu.map((item) => (
             <Link key={item.path} to={item.path} className="nav-item">
               {item.icon}
               <span>{item.label}</span>
@@ -84,10 +73,12 @@ const DashboardLayout = () => {
         
         <section className="content-area">
           <Routes>
-            <Route path="/" element={<div>Dashboard Home (Phase 6 Implementation)</div>} />
-            <Route path="/notices" element={<div>Notices coming soon</div>} />
-            <Route path="/flats" element={<div>Flat Management</div>} />
-            {/* Other routes will be filled in Step 8 */}
+            <Route path="/" element={<DashboardHome />} />
+            <Route path="/flats" element={<Flats />} />
+            <Route path="/complaints" element={<Complaints />} />
+            <Route path="/maintenance" element={<Maintenance />} />
+            <Route path="/bookings" element={<div>Bookings coming in Step 9</div>} />
+            <Route path="/notices" element={<div>Notice details coming soon</div>} />
           </Routes>
         </section>
       </main>
