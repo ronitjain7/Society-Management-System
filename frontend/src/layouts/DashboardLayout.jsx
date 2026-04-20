@@ -10,13 +10,15 @@ import {
   Car, 
   CreditCard, 
   LogOut,
-  Bell
+  Bell,
+  BarChart3
 } from 'lucide-react';
 
 import DashboardHome from '../pages/DashboardHome';
 import Complaints from '../pages/Complaints';
 import Flats from '../pages/Flats';
 import Maintenance from '../pages/Maintenance';
+import Analytics from '../pages/Analytics';
 
 import './DashboardLayout.css';
 
@@ -31,10 +33,10 @@ const DashboardLayout = () => {
 
   const menuItems = [
     { path: '/', icon: <LayoutDashboard size={20} />, label: 'Dashboard', roles: ['Admin', 'Owner', 'Tenant'] },
+    { path: '/analytics', icon: <BarChart3 size={20} />, label: 'Analytics', roles: ['Admin'] },
     { path: '/flats', icon: <Building2 size={20} />, label: 'Flats', roles: ['Admin'] },
     { path: '/complaints', icon: <MessageSquare size={20} />, label: 'Complaints', roles: ['Admin', 'Owner', 'Tenant'] },
     { path: '/maintenance', icon: <CreditCard size={20} />, label: 'Maintenance', roles: ['Admin', 'Owner', 'Tenant'] },
-    { path: '/bookings', icon: <Calendar size={20} />, label: 'Bookings', roles: ['Owner', 'Tenant'] },
   ];
 
   const filteredMenu = menuItems.filter(item => item.roles.includes(user?.resident_type));
@@ -74,10 +76,11 @@ const DashboardLayout = () => {
         <section className="content-area">
           <Routes>
             <Route path="/" element={<DashboardHome />} />
+            <Route path="/analytics" element={<Analytics />} />
             <Route path="/flats" element={<Flats />} />
             <Route path="/complaints" element={<Complaints />} />
             <Route path="/maintenance" element={<Maintenance />} />
-            <Route path="/bookings" element={<div>Bookings coming in Step 9</div>} />
+            <Route path="/bookings" element={<div>Bookings coming soon</div>} />
             <Route path="/notices" element={<div>Notice details coming soon</div>} />
           </Routes>
         </section>
