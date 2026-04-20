@@ -49,7 +49,28 @@ const createBooking = async (req, res) => {
   }
 };
 
+// @desc    Cancel a booking
+// @route   PUT /api/bookings/:id/cancel
+const cancelBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findByPk(req.params.id);
+    if (!booking) return res.status(404).json({ message: 'Booking not found' });
+    
+    // Only Admin or the owner of the booking can cancel
+    if (req.user.resident_type !== 'Admin' && booking.resident_id !== req.user.resident_id) {
+      return res.status(401).json({ message: 'Not authorized to cancel this booking' });
+    }
+
+    booking.status = 'Cancelled';
+    await booking.save();
+    res.json(booking);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 module.exports = {
   getBookings,
-  createBooking
+  createBooking,
+  cancelBooking
 };

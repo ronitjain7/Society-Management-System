@@ -8,6 +8,7 @@ router.route('/')
   .post(protect, authorize('Owner', 'Tenant'), createComplaint);
 
 router.route('/:id')
-  .patch(protect, authorize('Admin'), updateComplaintStatus);
+  .patch(protect, authorize('Admin'), updateComplaintStatus)
+  .put(protect, authorize('Admin'), updateComplaintStatus);
 
 module.exports = router;
