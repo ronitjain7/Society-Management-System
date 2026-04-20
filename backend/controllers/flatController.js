@@ -14,6 +14,21 @@ const getFlats = async (req, res) => {
   }
 };
 
+// @desc    Get basic info of all flats for public registration
+// @route   GET /api/flats/public
+// @access  Public
+const getPublicFlats = async (req, res) => {
+  try {
+    const flats = await Flat.findAll({
+      attributes: ['flat_id', 'flat_number', 'building_name', 'floor'],
+      order: [['building_name', 'ASC'], ['flat_number', 'ASC']]
+    });
+    res.json(flats);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 // @desc    Create a flat
 // @route   POST /api/flats
 // @access  Private/Admin
@@ -64,5 +79,6 @@ const getFlatById = async (req, res) => {
 module.exports = {
   getFlats,
   createFlat,
-  getFlatById
+  getFlatById,
+  getPublicFlats
 };

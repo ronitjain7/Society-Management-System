@@ -22,6 +22,13 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
+  const register = async (userData) => {
+    const { data } = await client.post('/auth/register', userData);
+    setUser(data);
+    localStorage.setItem('userInfo', JSON.stringify(data));
+    return data;
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('userInfo');
