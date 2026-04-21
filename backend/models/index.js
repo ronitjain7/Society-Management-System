@@ -81,5 +81,6 @@ module.exports = {
   Visitor,
   Security,
   EntryLog,
-  Furniture
+  Furniture,
+  Payment
 };
