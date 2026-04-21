@@ -7,7 +7,11 @@ const Resident = sequelize.define('Resident', {
     primaryKey: true,
     autoIncrement: true
   },
-  name: {
+  first_name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  last_name: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -28,16 +32,28 @@ const Resident = sequelize.define('Resident', {
     type: DataTypes.ENUM('Owner', 'Tenant', 'Admin'),
     allowNull: false
   },
+  ownership_type: {
+    type: DataTypes.ENUM('Owner', 'Tenant'),
+    defaultValue: 'Owner'
+  },
   flat_id: {
     type: DataTypes.INTEGER,
+    unique: true,
     references: {
       model: 'Flats',
       key: 'flat_id'
     }
+  },
+  status: {
+    type: DataTypes.ENUM('Active', 'Inactive'),
+    defaultValue: 'Active'
+  },
+  move_in_date: {
+    type: DataTypes.DATEONLY
   }
 }, {
   tableName: 'Residents',
-  timestamps: true
+  timestamps: false // Matching schema which uses created_at timestamp
 });
 
 module.exports = Resident;

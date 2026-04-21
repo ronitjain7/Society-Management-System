@@ -9,18 +9,21 @@ const Flat = sequelize.define('Flat', {
   },
   flat_number: {
     type: DataTypes.STRING,
-    unique: true,
     allowNull: false
   },
   floor: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
+  block: {
+    type: DataTypes.ENUM('A', 'B', 'C', 'D'),
+    allowNull: false
+  },
   building_name: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  config_type: {
+  type: {
     type: DataTypes.ENUM('1BHK', '2BHK', '3BHK', '4BHK', 'Penthouse'),
     allowNull: false
   },
@@ -30,7 +33,7 @@ const Flat = sequelize.define('Flat', {
   }
 }, {
   tableName: 'Flats',
-  timestamps: true
+  timestamps: false
 });
 
 module.exports = Flat;

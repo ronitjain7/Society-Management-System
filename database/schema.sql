@@ -7,26 +7,33 @@ USE smart_apartment;
 -- 1. Flats Table
 CREATE TABLE IF NOT EXISTS Flats (
     flat_id INT AUTO_INCREMENT PRIMARY KEY,
-    flat_number VARCHAR(10) NOT NULL UNIQUE,
+    flat_number VARCHAR(10) NOT NULL,
     floor INT NOT NULL,
+    block ENUM('A', 'B', 'C', 'D') NOT NULL,
     building_name VARCHAR(50) NOT NULL,
-    config_type ENUM('1BHK', '2BHK', '3BHK', '4BHK', 'Penthouse') NOT NULL,
+    type ENUM('1BHK', '2BHK', '3BHK', '4BHK', 'Penthouse') NOT NULL,
     area_sqft DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY (block, flat_number), -- Unique per block
     INDEX (flat_number)
 );
 
 -- 2. Residents Table (Base Table)
 CREATE TABLE IF NOT EXISTS Residents (
     resident_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     phone VARCHAR(15) NOT NULL,
     password VARCHAR(255) NOT NULL,
     resident_type ENUM('Owner', 'Tenant', 'Admin') NOT NULL,
+    ownership_type ENUM('Owner', 'Tenant') DEFAULT 'Owner',
     flat_id INT,
+    status ENUM('Active', 'Inactive') DEFAULT 'Active',
+    move_in_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (flat_id) REFERENCES Flats(flat_id) ON DELETE SET NULL,
+    UNIQUE KEY (flat_id), -- Ensure One Resident Per Flat
     INDEX (email)
 );
 

@@ -14,9 +14,9 @@ Owner.belongsTo(Resident, { foreignKey: 'resident_id' });
 Resident.hasOne(Tenant, { foreignKey: 'resident_id', onDelete: 'CASCADE' });
 Tenant.belongsTo(Resident, { foreignKey: 'resident_id' });
 
-// Resident lives in Flat
-Flat.hasMany(Resident, { foreignKey: 'flat_id' });
-Resident.belongsTo(Flat, { foreignKey: 'flat_id' });
+// Resident lebt in Flat
+Flat.hasMany(Resident, { foreignKey: 'flat_id', as: 'residents' });
+Resident.belongsTo(Flat, { foreignKey: 'flat_id', as: 'flats' });
 
 // Flat Components
 Flat.hasMany(Room, { foreignKey: 'flat_id', onDelete: 'CASCADE' });
