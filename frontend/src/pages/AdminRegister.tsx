@@ -10,7 +10,6 @@ import { useToast } from "@/hooks/use-toast";
 
 const steps = ["Society Details", "Admin Account", "Review & Submit"];
 
-import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 
 // TODO: Replace with Supabase insert calls
