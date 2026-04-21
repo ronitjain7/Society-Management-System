@@ -20,8 +20,8 @@ const getFlats = async (req, res) => {
 const getPublicFlats = async (req, res) => {
   try {
     const flats = await Flat.findAll({
-      attributes: ['flat_id', 'flat_number', 'building_name', 'floor'],
-      order: [['building_name', 'ASC'], ['flat_number', 'ASC']]
+      attributes: ['flat_id', 'flat_number', 'block', 'floor', 'type'],
+      order: [['block', 'ASC'], ['flat_number', 'ASC']]
     });
     res.json(flats);
   } catch (error) {
@@ -34,13 +34,14 @@ const getPublicFlats = async (req, res) => {
 // @access  Private/Admin
 const createFlat = async (req, res) => {
   try {
-    const { flat_number, floor, building_name, config_type, area_sqft, rooms } = req.body;
+    const { flat_number, floor, block, building_name, type, area_sqft, rooms } = req.body;
 
     const flat = await Flat.create({
       flat_number,
       floor,
+      block,
       building_name,
-      config_type,
+      type,
       area_sqft
     });
 

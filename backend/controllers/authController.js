@@ -2,12 +2,11 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { Resident, Owner, Tenant } = require('../models');
 
-// @desc    Register a new resident (Admin only usually, but open for now for setup)
+// @desc    Register a new resident
 // @route   POST /api/auth/register
-// @access  Public (Should be Admin restricted later)
 const registerResident = async (req, res) => {
   try {
-    const { name, email, phone, password, resident_type, flat_id, extra_details } = req.body;
+    const { first_name, last_name, email, phone, password, resident_type, flat_id, ownership_type, move_in_date, status } = req.body;
 
     // Check if user exists
     const userExists = await Resident.findOne({ where: { email } });
@@ -21,32 +20,22 @@ const registerResident = async (req, res) => {
 
     // Create resident
     const resident = await Resident.create({
-      name,
+      first_name,
+      last_name,
       email,
       phone,
       password: hashedPassword,
-      resident_type,
-      flat_id
+      resident_type: resident_type || 'Owner',
+      ownership_type: ownership_type || resident_type || 'Owner',
+      flat_id,
+      move_in_date,
+      status: status || 'Active'
     });
-
-    // Handle specialized attributes (Owner/Tenant)
-    if (resident_type === 'Owner' && extra_details?.ownership_date) {
-      await Owner.create({
-        resident_id: resident.resident_id,
-        ownership_date: extra_details.ownership_date
-      });
-    } else if (resident_type === 'Tenant' && extra_details) {
-      await Tenant.create({
-        resident_id: resident.resident_id,
-        rent: extra_details.rent,
-        lease_start: extra_details.lease_start,
-        lease_end: extra_details.lease_end
-      });
-    }
 
     res.status(201).json({
       id: resident.resident_id,
-      name: resident.name,
+      first_name: resident.first_name,
+      last_name: resident.last_name,
       email: resident.email,
       resident_type: resident.resident_type,
       token: generateToken(resident.resident_id)
@@ -59,18 +48,17 @@ const registerResident = async (req, res) => {
 
 // @desc    Authenticate a resident
 // @route   POST /api/auth/login
-// @access  Public
 const loginResident = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check for resident email
     const resident = await Resident.findOne({ where: { email } });
 
     if (resident && (await bcrypt.compare(password, resident.password))) {
       res.json({
         id: resident.resident_id,
-        name: resident.name,
+        first_name: resident.first_name,
+        last_name: resident.last_name,
         email: resident.email,
         resident_type: resident.resident_type,
         token: generateToken(resident.resident_id)

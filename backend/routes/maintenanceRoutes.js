@@ -8,6 +8,6 @@ router.route('/')
   .post(protect, authorize('Admin'), createBill);
 
 router.post('/check-overdue', protect, authorize('Admin'), checkOverdue);
-router.patch('/:id/pay', protect, payBill);
+router.post('/:id/pay', protect, payBill);
 
 module.exports = router;

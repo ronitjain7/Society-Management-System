@@ -6,7 +6,11 @@ const { Visitor, Flat } = require('../models');
 const getVisitors = async (req, res) => {
   try {
     const visitors = await Visitor.findAll({
-      include: [{ model: Flat, attributes: ['flat_id', 'flat_number', 'building_name'] }],
+      include: [{ 
+        model: Flat, 
+        as: 'flats',
+        attributes: ['flat_id', 'flat_number', 'block'] 
+      }],
       order: [['visit_date', 'DESC']]
     });
     res.json(visitors);

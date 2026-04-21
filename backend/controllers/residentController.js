@@ -6,7 +6,11 @@ const { Resident, Flat, Owner, Tenant } = require('../models');
 const getResidents = async (req, res) => {
   try {
     const residents = await Resident.findAll({
-      include: [{ model: Flat, attributes: ['flat_id', 'flat_number', 'building_name', 'floor'] }],
+      include: [{ 
+        model: Flat, 
+        as: 'flats',
+        attributes: ['flat_id', 'flat_number', 'block', 'floor', 'type'] 
+      }],
       attributes: { exclude: ['password'] }
     });
     res.json(residents);
@@ -22,7 +26,11 @@ const getResidents = async (req, res) => {
 const getResidentById = async (req, res) => {
   try {
     const resident = await Resident.findByPk(req.params.id, {
-      include: [{ model: Flat, attributes: ['flat_id', 'flat_number', 'building_name', 'floor'] }],
+      include: [{ 
+        model: Flat, 
+        as: 'flats',
+        attributes: ['flat_id', 'flat_number', 'block', 'floor', 'type'] 
+      }],
       attributes: { exclude: ['password'] }
     });
     if (!resident) return res.status(404).json({ message: 'Resident not found' });
@@ -39,8 +47,19 @@ const updateResident = async (req, res) => {
   try {
     const resident = await Resident.findByPk(req.params.id);
     if (!resident) return res.status(404).json({ message: 'Resident not found' });
-    const { name, email, phone, flat_id, resident_type } = req.body;
-    await resident.update({ name, email, phone, flat_id, resident_type });
+    
+    const { 
+      first_name, last_name, email, phone, 
+      flat_id, resident_type, ownership_type, 
+      status, move_in_date 
+    } = req.body;
+
+    await resident.update({ 
+      first_name, last_name, email, phone, 
+      flat_id, resident_type, ownership_type, 
+      status, move_in_date 
+    });
+
     res.json({ message: 'Resident updated', resident });
   } catch (error) {
     console.error(error);

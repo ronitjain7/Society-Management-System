@@ -12,7 +12,7 @@ const getComplaints = async (req, res) => {
 
     const complaints = await Complaint.findAll({
       where: whereClause,
-      include: [{ model: Resident, attributes: ['name', 'phone'] }]
+      include: [{ model: Resident, attributes: ['first_name', 'last_name', 'phone'] }]
     });
     res.json(complaints);
   } catch (error) {

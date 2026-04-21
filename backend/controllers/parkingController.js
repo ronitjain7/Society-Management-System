@@ -47,9 +47,16 @@ const assignParking = async (req, res) => {
 // @route   GET /api/parking
 const getParkingStatus = async (req, res) => {
   try {
-    const spots = await Parking.findAll({ include: [Flat] });
+    const spots = await Parking.findAll({ 
+      include: [{ 
+        model: Flat, 
+        as: 'flats',
+        attributes: ['flat_id', 'flat_number', 'block'] 
+      }] 
+    });
     res.json(spots);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 };

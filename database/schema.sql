@@ -173,3 +173,14 @@ CREATE TABLE IF NOT EXISTS Furniture (
     furniture_type VARCHAR(50),
     FOREIGN KEY (flat_id) REFERENCES Flats(flat_id) ON DELETE CASCADE
 );
+
+-- 17. Payments Table (for Maintenance history)
+CREATE TABLE IF NOT EXISTS Payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    maintenance_id INT NOT NULL,
+    amount_paid DECIMAL(15, 2) NOT NULL,
+    payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    payment_mode ENUM('Online', 'Cash', 'Cheque') NOT NULL,
+    transaction_id VARCHAR(100),
+    FOREIGN KEY (maintenance_id) REFERENCES Maintenance(maintenance_id) ON DELETE CASCADE
+);
