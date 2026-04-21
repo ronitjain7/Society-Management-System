@@ -20,7 +20,7 @@ const Maintenance = sequelize.define('Maintenance', {
   due_date: { type: DataTypes.DATEONLY, allowNull: false },
   payment_date: { type: DataTypes.DATEONLY },
   status: { type: DataTypes.ENUM('Unpaid', 'Paid', 'Partial', 'Overdue'), defaultValue: 'Unpaid' }
-}, { tableName: 'Maintenance', timestamps: true });
+}, { tableName: 'Maintenance', timestamps: false });
 
 // Notice Model
 const Notice = sequelize.define('Notice', {

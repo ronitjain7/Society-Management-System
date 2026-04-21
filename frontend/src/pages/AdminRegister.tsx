@@ -41,13 +41,17 @@ const AdminRegister = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
+    const names = form.fullName.trim().split(" ");
+    const first_name = names[0] || "";
+    const last_name = names.slice(1).join(" ") || "";
+    
     const res = await register({
-      name: form.fullName,
+      first_name,
+      last_name,
       email: form.email,
       phone: form.phone,
       password: form.password,
-      resident_type: "Admin" as any,
-      flat_id: 1, // Defaulting to 1 for Admin
+      resident_type: "Admin",
     });
     setLoading(false);
     

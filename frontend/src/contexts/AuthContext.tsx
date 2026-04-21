@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import api from "@/lib/api";
 
-type Role = "admin" | "resident";
+type Role = "admin" | "resident" | "security";
 
 interface User {
   id: string;
@@ -22,12 +22,13 @@ interface AuthContextType {
 }
 
 interface RegisterData {
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
   password: string;
-  resident_type: "Owner" | "Tenant";
-  flat_id: string | number;
+  resident_type: "Owner" | "Tenant" | "Admin" | "Security";
+  flat_id?: string | number;
   extra_details?: Record<string, string>;
 }
 
@@ -52,12 +53,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
       const { data } = await api.post("/auth/login", { email, password });
-      // Determine role: if resident_type is "Admin" treat as admin, else resident
-      const role: Role = data.resident_type === "Admin" ? "admin" : "resident";
+      let role: Role = "resident";
+      if (data.resident_type === "Admin") role = "admin";
+      if (data.resident_type === "Security") role = "security";
       const userObj: User = {
-        id: String(data.id),
+        id: String(data.resident_id),
         email: data.email,
-        name: data.name,
+        name: data.first_name + " " + data.last_name,
         role,
         token: data.token,
       };
@@ -72,11 +74,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (userData: RegisterData): Promise<{ success: boolean; error?: string }> => {
     try {
       const { data } = await api.post("/auth/register", userData);
-      const role: Role = data.resident_type === "Admin" ? "admin" : "resident";
+      let role: Role = "resident";
+      if (data.resident_type === "Admin") role = "admin";
+      if (data.resident_type === "Security") role = "security";
       const userObj: User = {
-        id: String(data.id),
+        id: String(data.resident_id),
         email: data.email,
-        name: data.name,
+        name: data.first_name + " " + data.last_name,
         role,
         token: data.token,
       };

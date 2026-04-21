@@ -25,7 +25,7 @@ const Vehicle = sequelize.define('Vehicle', {
   vehicle_type: { type: DataTypes.ENUM('Car', 'Bike', 'Bicycle', 'Other'), allowNull: false },
   resident_id: { type: DataTypes.INTEGER, allowNull: false },
   parking_id: { type: DataTypes.INTEGER, unique: true }
-}, { tableName: 'Vehicles', timestamps: true });
+}, { tableName: 'Vehicles', timestamps: false });
 
 // Facility Model
 const Facility = sequelize.define('Facility', {
@@ -43,6 +43,6 @@ const Booking = sequelize.define('Booking', {
   booking_date: { type: DataTypes.DATEONLY, allowNull: false },
   time_slot: { type: DataTypes.STRING, allowNull: false },
   status: { type: DataTypes.ENUM('Confirmed', 'Cancelled', 'Completed'), defaultValue: 'Confirmed' }
-}, { tableName: 'Bookings', timestamps: true });
+}, { tableName: 'Bookings', timestamps: false });
 
 module.exports = { Room, Parking, Vehicle, Facility, Booking };
